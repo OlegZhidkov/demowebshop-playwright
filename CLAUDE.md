@@ -15,6 +15,10 @@ Use TypeScript and Playwright Test.
 - Use Playwright's built-in assertions and auto-waiting.
 - Prefer role-based, label-based, and other user-facing locators.
 - Avoid arbitrary timeouts and brittle CSS or XPath selectors.
+- If no user-facing locator works, use a stable attribute (id, name, data-*) as a last resort, with a comment saying why.
+- Avoid `first()` and `nth()` unless the selection is intentional, with a comment saying why.
+- Do not use `force` clicks to bypass genuine UI problems.
+- Avoid `networkidle` waits; wait for a specific application condition.
 - Use fixtures when they provide meaningful setup, reuse, or isolation.
 - Introduce Page Object Models only where they improve maintainability.
 - Keep test data and reusable helpers separate from test assertions when appropriate.
@@ -29,6 +33,11 @@ Use TypeScript and Playwright Test.
 - Verify meaningful application behavior rather than implementation details.
 - Do not use real payment information or perform real purchases.
 - Investigate the application's current behavior before designing tests.
+- Structure tests as Arrange-Act-Assert, with names that describe the expected behavior.
+- Assert meaningful business outcomes, not just that an element is visible.
+- Use soft assertions only for independent checks.
+- Keep tests safe to run in parallel: no shared mutable state, such as a shared cart or account.
+- CI retries are a safety net. Investigate any test the report marks as flaky (passed only on retry).
 
 ## Configuration
 
