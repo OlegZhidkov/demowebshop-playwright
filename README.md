@@ -39,10 +39,28 @@ created once by hand. Its credentials are never committed.
 
 Tests that register a new account use their own unique fake email instead.
 
+## Guards for Claude Code
+
+Two hooks run inside Claude Code (see `scripts/hooks/`):
+
+- `secrets-gate.js` runs before any `git push`. It scans the commits that are not on a remote
+  yet and blocks the push if they add a literal credential or a token. This covers the main
+  session and every agent.
+- `writer-guard.js` is attached to the `playwright-test-writer` agent only. It limits that
+  agent to editing `tests/` and to a short list of commands, so it cannot commit or push
+  through its own commands. It is not a sandbox: a spec written under `tests/` is code that
+  the tests run.
+
+Both are limits, not guarantees. The gate is a pattern check: it misses unquoted values,
+encoded secrets and values shorter than 4 characters, and neither hook covers pushes made
+from your own terminal. For known token formats, also enable GitHub secret scanning with push
+protection.
+
 ## Project layout
 
 ```
 tests/                      Playwright specs
+scripts/hooks/              Claude Code hook scripts (secrets gate, writer guard)
 playwright.config.ts        Test configuration and base URL
 tsconfig.json               TypeScript strict config
 .github/workflows/          CI: typecheck, then tests
