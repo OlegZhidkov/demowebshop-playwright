@@ -15,8 +15,8 @@ Use TypeScript and Playwright Test.
 - Use Playwright's built-in assertions and auto-waiting.
 - Prefer role-based, label-based, and other user-facing locators.
 - Avoid arbitrary timeouts and brittle CSS or XPath selectors.
-- If no user-facing locator works, use a stable attribute (id, name, data-*) as a last resort, with a comment saying why.
-- Avoid `first()` and `nth()` unless the selection is intentional, with a comment saying why.
+- If no user-facing locator works, use a stable attribute (id, name, data-*) as a last resort.
+- Avoid `first()` and `nth()` unless the selection is intentional.
 - Do not use `force` clicks to bypass genuine UI problems.
 - Avoid `networkidle` waits; wait for a specific application condition.
 - Use fixtures when they provide meaningful setup, reuse, or isolation.
