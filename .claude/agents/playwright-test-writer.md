@@ -25,10 +25,13 @@ Rules:
 
 - Follow CLAUDE.md: user-facing locators, Arrange-Act-Assert, independent and parallel-safe
   tests, built-in `expect`, no sleeps, and the base URL only in `playwright.config.ts`.
-- No real payment data, no placing orders, no secrets. Use a throwaway constant password in
-  the spec (for example `Test1234!`); it is not a secret.
-- Test emails must be fake and unique per test, for example
-  `` `qa+${crypto.randomUUID()}@example.com` ``.
+- No real payment data, no placing orders, no secrets.
+- The dedicated test user comes from the `TEST_USER_EMAIL` and `TEST_USER_PASSWORD`
+  environment variables. Never hardcode its credentials.
+- A test that registers a new account uses a unique fake email, for example
+  `` `qa+${crypto.randomUUID()}@example.com` ``, and a throwaway constant password in the
+  spec (for example `Test1234!`).
+- Tests that only check validation or errors use fixed fake values and create nothing.
 - Only the planned tests may create accounts or other data on the live site. The site has no
   delete, so keep such runs to a minimum (see below).
 
