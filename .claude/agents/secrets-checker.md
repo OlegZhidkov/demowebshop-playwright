@@ -41,8 +41,8 @@ What counts as a finding:
   `Password`, `Secret` or `Token`. Do not flag unrelated words such as `press('Enter')`,
   key names, or paths like `playwright/.auth`; judge by the value.
 - The deciding rule for values: a value that is submitted to create an account or to log in
-  is a finding, even when it looks like dummy data such as `Test1234!`. A reader can reuse
-  it, and the account it creates is real. A value that the site only rejects, such as `'abc'`
+  is a finding, even when it looks like dummy data, such as a typical "Test" plus digits
+  password. A reader can reuse it, and the account it creates is real. A value that the site only rejects, such as `'abc'`
   as a too-short password, is not a finding.
 - A literal email used as the login of a real account on the shop. Fake validation values on
   `example.com` that are never submitted successfully are not findings.
