@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "playwright test",
+    "test:data": "RUN_DATA_TESTS=1 playwright test --grep @creates-data",
     "typecheck": "tsc --noEmit"
   },
   "keywords": [],
