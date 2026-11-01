@@ -12,6 +12,8 @@ if (existsSync(envFile)) process.loadEnvFile(envFile);
  */
 export default defineConfig({
   testDir: './tests',
+  /* Tests tagged @creates-data register real accounts on the shop. They run only with RUN_DATA_TESTS=1 (npm run test:data). */
+  grepInvert: process.env.RUN_DATA_TESTS === '1' ? undefined : /@creates-data/,
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
