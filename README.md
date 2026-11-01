@@ -27,6 +27,18 @@ so browsers are installed explicitly with the command above.
 
 The application base URL is set once, in `playwright.config.ts`.
 
+## Test user
+
+Tests that need a logged-in or existing account use one dedicated account on the shop,
+created once by hand. Its credentials are never committed.
+
+- **Locally:** copy `.env.example` to `.env` and fill in `TEST_USER_EMAIL` and
+  `TEST_USER_PASSWORD`. `.env` is git-ignored.
+- **CI:** add the same two names as repository secrets (Settings > Secrets and variables >
+  Actions).
+
+Tests that register a new account use their own unique fake email instead.
+
 ## Project layout
 
 ```
