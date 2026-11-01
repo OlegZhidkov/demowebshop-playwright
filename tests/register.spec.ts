@@ -32,15 +32,15 @@ test.describe('Registration', () => {
   test('shows required errors when the form is submitted empty', async ({ page }) => {
     await submit(page);
 
-    await expect(page.getByText('First name is required.')).toBeVisible();
-    await expect(page.getByText('Last name is required.')).toBeVisible();
-    await expect(page.getByText('Email is required.')).toBeVisible();
+    await expect.soft(page.getByText('First name is required.')).toBeVisible();
+    await expect.soft(page.getByText('Last name is required.')).toBeVisible();
+    await expect.soft(page.getByText('Email is required.')).toBeVisible();
     // "Password is required." appears twice and no user-facing locator tells the two apart,
     // so each message is scoped to its field's container.
-    await expect(
+    await expect.soft(
       page.locator('.inputs', { has: page.getByLabel('Password:', { exact: true }) }).getByText('Password is required.'),
     ).toBeVisible();
-    await expect(
+    await expect.soft(
       page.locator('.inputs', { has: page.getByLabel('Confirm password:') }).getByText('Password is required.'),
     ).toBeVisible();
   });
