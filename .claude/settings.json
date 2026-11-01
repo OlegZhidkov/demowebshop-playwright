@@ -7,9 +7,7 @@
       "Bash(npx playwright *)",
       "Bash(git status)",
       "Bash(git diff *)",
-      "Bash(git log *)"
-    ],
-    "ask": [
+      "Bash(git log *)",
       "Bash(git push *)",
       "Bash(git commit *)",
       "Bash(git merge *)",
