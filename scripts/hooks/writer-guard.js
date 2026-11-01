@@ -42,7 +42,7 @@ if (['Edit', 'Write', 'MultiEdit', 'NotebookEdit'].includes(input.tool_name)) {
 if (input.tool_name === 'Bash') {
   const command = String(toolInput.command || '').trim();
   const allowed = [
-    /^npm run (?:typecheck|test)(?: .*)?$/,
+    /^npm run (?:typecheck|test|test:data)(?: .*)?$/,
     /^npm test(?: .*)?$/,
     /^npx playwright test(?: .*)?$/,
     /^git (?:status|diff|log|show|ls-files|check-ignore)(?: .*)?$/,
@@ -59,7 +59,7 @@ if (input.tool_name === 'Bash') {
   }
   if (!allowed.some((pattern) => pattern.test(command))) {
     block(
-      'this agent may run only: npm run typecheck | test, npm test, npx playwright test, ' +
+      'this agent may run only: npm run typecheck | test | test:data, npm test, npx playwright test, ' +
         'read-only git (status, diff, log, show, ls-files, check-ignore), ls, pwd. ' +
         'It must not add, commit, push or change git state; the caller does that.',
     );

@@ -19,7 +19,8 @@ so browsers are installed explicitly with the command above.
 
 | Command | What it does |
 |---|---|
-| `npm test` | Run all Playwright tests (Chromium) |
+| `npm test` | Run the Playwright tests (Chromium), except those tagged `@creates-data` |
+| `npm run test:data` | Run only the `@creates-data` tests. They register real accounts on the shop, so run them on purpose, not in CI |
 | `npx playwright test tests/search.spec.ts` | Run a single spec |
 | `npx playwright test --ui` | Run in UI mode |
 | `npx playwright show-report` | Open the last HTML report |
