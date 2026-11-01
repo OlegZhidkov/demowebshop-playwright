@@ -46,6 +46,17 @@ Before considering a change complete:
 3. Review the diff for unnecessary complexity.
 4. Report which checks passed and which failed.
 
+## Feature workflow
+
+For every feature or test change, in this order:
+
+1. **Plan:** inspect the existing code and the live app (use the `test-planner` agent). Propose the change and wait for approval.
+2. **Implement:** make one focused change on a short-lived branch, with no unrelated edits.
+3. **Verify:** complete the Quality checks above.
+4. **Review:** run the `code-reviewer` agent on the diff and fix its findings. Then repeat steps 3 and 4 until the review is clean.
+5. **Commit:** commit on the branch once the review is clean. No AI attribution lines in commits or PR descriptions.
+6. **Observe CI:** push, open a PR, and confirm the same commit passes in GitHub Actions (`gh pr checks <n>`). After a squash and merge, update `main` and delete the old branch.
+
 ## Collaboration
 
 - Explain significant architectural decisions before implementing them.
