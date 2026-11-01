@@ -58,7 +58,15 @@ payment data or perform real purchases.
 
 ## Continuous integration
 
-GitHub Actions runs `npm run typecheck` and `npm test` on pushes and pull requests to `main`.
+GitHub Actions runs `npm run typecheck` and `npm test`:
+
+- on every pull request into `main`;
+- every night at 02:00 Israel time, on `main`;
+- on demand for any pushed branch: `gh workflow run playwright.yml --ref <branch>`, or
+  Actions > Run workflow in GitHub. Manual runs work once the workflow is on `main`.
+
+A push to `main` does not start a run by itself. The pull request run covers the change and
+the nightly run re-checks `main`.
 
 ## Workflow
 
