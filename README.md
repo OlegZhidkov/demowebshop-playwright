@@ -1,0 +1,53 @@
+# Demo Web Shop Automation
+
+UI and API test automation for https://demowebshop.tricentis.com/, built with
+[Playwright Test](https://playwright.dev/) and TypeScript (strict mode).
+
+## Setup
+
+Requires Node.js (LTS).
+
+```bash
+npm ci
+npx playwright install chromium
+```
+
+Install scripts of dependencies are blocked on purpose (`.npmrc` sets `ignore-scripts=true`),
+so browsers are installed explicitly with the command above.
+
+## Running
+
+| Command | What it does |
+|---|---|
+| `npm test` | Run all Playwright tests (Chromium) |
+| `npx playwright test tests/search.spec.ts` | Run a single spec |
+| `npx playwright test --ui` | Run in UI mode |
+| `npx playwright show-report` | Open the last HTML report |
+| `npm run typecheck` | Type-check without emitting files |
+
+The application base URL is set once, in `playwright.config.ts`.
+
+## Project layout
+
+```
+tests/                      Playwright specs
+playwright.config.ts        Test configuration and base URL
+tsconfig.json               TypeScript strict config
+.github/workflows/          CI: typecheck, then tests
+.claude/                    Claude Code settings and project agents
+CLAUDE.md                   Project conventions
+```
+
+## Conventions
+
+See [CLAUDE.md](CLAUDE.md). In short: tests are independent and focus on business
+behavior, use role/label locators and Playwright's auto-waiting, and never use real
+payment data or perform real purchases.
+
+## Continuous integration
+
+GitHub Actions runs `npm run typecheck` and `npm test` on pushes and pull requests to `main`.
+
+## Workflow
+
+Work happens on short-lived branches and lands through pull requests (squash and merge).
