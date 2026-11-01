@@ -4,7 +4,7 @@ on:
     branches: [ main, master ]
   workflow_dispatch:
   schedule:
-    # Cron runs in UTC: 00:00 UTC is 02:00 in Israel in winter and 03:00 in summer.
+    # Cron runs in UTC.
     - cron: '0 0 * * *'
 jobs:
   test:

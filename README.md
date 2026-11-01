@@ -61,7 +61,7 @@ payment data or perform real purchases.
 GitHub Actions runs `npm run typecheck` and `npm test`:
 
 - on every pull request into `main`;
-- every night at 00:00 UTC (02:00 in Israel in winter, 03:00 in summer), on `main`;
+- every night at 00:00 UTC, on `main`;
 - on demand for any pushed branch: `gh workflow run playwright.yml --ref <branch>`, or
   Actions > Run workflow in GitHub. Manual runs work once the workflow is on `main`.
 
