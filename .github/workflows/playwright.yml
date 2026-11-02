@@ -34,3 +34,13 @@ jobs:
         name: playwright-report
         path: playwright-report/
         retention-days: 30
+    - name: Notify Slack about the nightly run
+      if: ${{ always() && github.event_name == 'schedule' }}
+      # A Slack outage or a missing webhook must not turn a green test run red.
+      continue-on-error: true
+      uses: slackapi/slack-github-action@v2
+      with:
+        webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
+        webhook-type: incoming-webhook
+        payload: |
+          text: "${{ job.status == 'success' && '✅' || '❌' }} Nightly Playwright run ${{ job.status }}: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
