@@ -35,7 +35,7 @@ jobs:
         path: playwright-report/
         retention-days: 30
     - name: Notify Slack about the nightly run
-      if: ${{ always() && github.event_name == 'schedule' }}
+      if: ${{ always() && github.event_name != 'pull_request' }}
       # A Slack outage or a missing webhook must not turn a green test run red.
       continue-on-error: true
       uses: slackapi/slack-github-action@v2
