@@ -5,6 +5,9 @@ import { LoginPage } from './pages/login-page';
 import { requireEnv } from './support/env';
 import { expect } from './support/matchers';
 
+// Traces record typed values, including the password. Any spec that types credentials needs this.
+test.use({ trace: 'off' });
+
 test.describe('Password recovery', () => {
   const sentMessage = 'Email with instructions has been sent to you.';
 
