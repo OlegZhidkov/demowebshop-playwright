@@ -28,6 +28,18 @@ so browsers are installed explicitly with the command above.
 
 The application base URL is set once, in `playwright.config.ts`.
 
+## CI reports
+
+The run page shows a summary (counts and failed tests). The full HTML report is attached to each
+run as the encrypted artifact `encrypted-report`. To open it, you need the matching private key
+in your gpg keyring:
+
+```bash
+gh run download <run-id> -n encrypted-report
+gpg --decrypt report.tar.gz.gpg | tar xz
+npx playwright show-report
+```
+
 ## Test user
 
 Tests that need a logged-in or existing account use one dedicated account on the shop,

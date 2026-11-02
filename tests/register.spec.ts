@@ -2,9 +2,6 @@ import { randomUUID } from 'node:crypto';
 import { test, expect, type Page } from '@playwright/test';
 import { requireEnv } from './support/env';
 
-// Traces record typed values, including the password. Any spec that types credentials needs this.
-test.use({ trace: 'off' });
-
 test.describe('Registration', () => {
   // Fresh values on every call, so tests never share an account or credentials.
   const validData = () => {

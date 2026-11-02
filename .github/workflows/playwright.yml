@@ -31,12 +31,22 @@ jobs:
     - name: Summarize results
       if: ${{ !cancelled() }}
       run: node scripts/ci-summary.js >> "$GITHUB_STEP_SUMMARY"
+    - name: Encrypt the report
+      if: ${{ !cancelled() }}
+      env:
+        # Fingerprint of the public key in .github/report-public-key.asc (not a secret).
+        REPORT_KEY_FINGERPRINT: 3DEDD56AF44E631585911382697F26AC4C702A61
+      shell: bash # explicit bash enables pipefail, so a failing tar fails the step
+      run: |
+        gpg --batch --import .github/report-public-key.asc
+        tar czf - playwright-report test-results | gpg --batch --yes --trust-model always \
+          --encrypt --recipient "$REPORT_KEY_FINGERPRINT" --output report.tar.gz.gpg
     - uses: actions/upload-artifact@v7
       if: ${{ !cancelled() }}
       with:
-        name: failure-screenshots
-        path: test-results/**/*.png
-        if-no-files-found: ignore
+        name: encrypted-report
+        path: report.tar.gz.gpg
+        if-no-files-found: error
         retention-days: 30
     - name: Notify Slack about the nightly run
       if: ${{ always() && github.event_name == 'schedule' }}
