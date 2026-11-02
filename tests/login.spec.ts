@@ -11,6 +11,9 @@ async function authCookie(context: BrowserContext) {
   return cookie!;
 }
 
+// Traces record typed values, including the password. Any spec that types credentials needs this.
+test.use({ trace: 'off' });
+
 test.describe('Login', () => {
   const failureSummary = 'Login was unsuccessful. Please correct the errors and try again.';
 
