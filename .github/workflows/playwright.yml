@@ -9,10 +9,11 @@ on:
 jobs:
   test:
     timeout-minutes: 15
-    runs-on: ubuntu-latest
+    # Pinned because ubuntu-latest is moving to Ubuntu 26, which Playwright may not support yet.
+    runs-on: ubuntu-24.04
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
+    - uses: actions/checkout@v7
+    - uses: actions/setup-node@v7
       with:
         node-version: lts/*
         cache: npm
@@ -27,7 +28,7 @@ jobs:
       env:
         TEST_USER_EMAIL: ${{ secrets.TEST_USER_EMAIL }}
         TEST_USER_PASSWORD: ${{ secrets.TEST_USER_PASSWORD }}
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v7
       if: ${{ !cancelled() }}
       with:
         name: playwright-report
