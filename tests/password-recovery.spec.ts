@@ -1,8 +1,9 @@
 import { randomUUID } from 'node:crypto';
-import { test, expect } from '@playwright/test';
+import { test } from '@playwright/test';
 import { Header } from './pages/header';
-import { logIn } from './support/auth';
+import { LoginPage } from './pages/login-page';
 import { requireEnv } from './support/env';
+import { expect } from './support/matchers';
 
 test.describe('Password recovery', () => {
   const sentMessage = 'Email with instructions has been sent to you.';
@@ -47,7 +48,9 @@ test.describe('Password recovery', () => {
     await expect(page.getByText(sentMessage)).toBeVisible();
 
     // The password is unchanged, so the account still works.
-    await logIn(page, email, requireEnv('TEST_USER_PASSWORD'));
-    await new Header(page).expectLoggedInAs(email);
+    const loginPage = new LoginPage(page);
+    await loginPage.open();
+    await loginPage.logIn(email, requireEnv('TEST_USER_PASSWORD'));
+    await expect(new Header(page)).toBeLoggedInAs(email);
   });
 });

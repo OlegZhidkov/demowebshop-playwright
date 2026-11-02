@@ -1,4 +1,4 @@
-import { expect, type Locator, type Page } from '@playwright/test';
+import type { Locator, Page } from '@playwright/test';
 
 export class Header {
   readonly registerLink: Locator;
@@ -13,19 +13,6 @@ export class Header {
 
   accountLink(email: string) {
     return this.page.getByRole('link', { name: email, exact: true });
-  }
-
-  async expectLoggedOut() {
-    await expect(this.loginLink).toBeVisible();
-    await expect(this.registerLink).toBeVisible();
-    await expect(this.logoutLink).toHaveCount(0);
-  }
-
-  async expectLoggedInAs(email: string) {
-    await expect(this.accountLink(email)).toBeVisible();
-    await expect(this.logoutLink).toBeVisible();
-    await expect(this.loginLink).toHaveCount(0);
-    await expect(this.registerLink).toHaveCount(0);
   }
 
   async logout() {
