@@ -4,6 +4,7 @@ node_modules/
 /test-results/
 /playwright-report/
 /blob-report/
+/report.tar.gz.gpg
 /playwright/.cache/
 /playwright/.auth/
 
