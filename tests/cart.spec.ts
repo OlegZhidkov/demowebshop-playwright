@@ -1,11 +1,21 @@
 import { test } from '@playwright/test';
 import { CartPage } from './pages/cart-page';
+import { GiftCardForm } from './pages/gift-card-form';
 import { Header } from './pages/header';
 import { LoginPage } from './pages/login-page';
 import { addToCart, emptyCart } from './support/cart';
 import { requireEnv } from './support/env';
 import { expect } from './support/matchers';
-import { cellPhonesCategory, configurableComputer, laptop, smartphone } from './support/products';
+import {
+  cellPhonesCategory,
+  configurableComputer,
+  desktopsCategory,
+  giftCardsCategory,
+  laptop,
+  physicalGiftCard,
+  smartphone,
+  virtualGiftCard,
+} from './support/products';
 
 // Read inside the tests, so a missing variable fails these tests only, not the loading of the whole suite.
 const credentials = () => ({ email: requireEnv('TEST_USER_EMAIL'), password: requireEnv('TEST_USER_PASSWORD') });
@@ -15,6 +25,26 @@ const invalidQuantities = [
   { quantity: '-1', message: 'Quantity should be positive' },
   { quantity: 'abc', message: 'Quantity should be positive' },
   { quantity: '10001', message: 'The maximum quantity allowed for purchase is 10000.' },
+];
+
+const giftCardTypes = [
+  {
+    kind: 'virtual',
+    product: virtualGiftCard,
+    hasEmails: true,
+    requiredMessages: [
+      'Enter valid recipient name',
+      'Enter valid recipient email',
+      'Enter valid sender name',
+      'Enter valid sender email',
+    ],
+  },
+  {
+    kind: 'physical',
+    product: physicalGiftCard,
+    hasEmails: false,
+    requiredMessages: ['Enter valid recipient name', 'Enter valid sender name'],
+  },
 ];
 
 // The same cart behavior is checked for a guest and for the logged-in test user.
@@ -156,7 +186,76 @@ for (const userType of ['guest', 'logged-in'] as const) {
       });
     });
 
+    for (const card of giftCardTypes) {
+      test(`${userType}: adds a ${card.kind} gift card once its details are filled in`, async ({ page }) => {
+        const header = new Header(page);
+        const form = new GiftCardForm(page);
+        const productUrl = `/${card.product.slug}`;
+        await page.goto(productUrl);
+        const unique = crypto.randomUUID();
+
+        await form.fill({
+          recipientName: 'Test Recipient',
+          recipientEmail: card.hasEmails ? `qa+recipient-${unique}@example.com` : undefined,
+          senderName: 'Test Sender',
+          senderEmail: card.hasEmails ? `qa+sender-${unique}@example.com` : undefined,
+        });
+        // Attribute fallback: the page also lists other products with their own "Add to cart" buttons,
+        // so pick the main product's button by its id.
+        await page.locator(`#add-to-cart-button-${card.product.id}`).click();
+
+        // The success bar disappears after about 3.5 seconds, so check it right after the click.
+        await expect(page.getByText('The product has been added to your shopping cart')).toBeVisible();
+        await expect(header.cartLink).toHaveText(/\(1\)/);
+        await expect(page).toHaveURL(productUrl);
+      });
+
+      test(`${userType}: reports the missing details of a ${card.kind} gift card and adds nothing`, async ({
+        page,
+      }) => {
+        const header = new Header(page);
+        const form = new GiftCardForm(page);
+        const productUrl = `/${card.product.slug}`;
+        await page.goto(productUrl);
+        // A logged-in customer's name and email are pre-filled in the sender fields, so clear them
+        // to leave the form empty for both user types.
+        await form.senderName.clear();
+        if (card.hasEmails) await form.senderEmail.clear();
+
+        // Attribute fallback: see above, the main product's button is found by its id.
+        await page.locator(`#add-to-cart-button-${card.product.id}`).click();
+
+        for (const message of card.requiredMessages) {
+          await expect(page.getByText(message)).toBeVisible();
+        }
+        await expect(header.cartLink).toHaveText(/\(0\)/);
+        await expect(page).toHaveURL(productUrl);
+      });
+    }
+
     if (userType === 'guest') {
+      const listProducts = [
+        { category: giftCardsCategory, product: virtualGiftCard },
+        { category: giftCardsCategory, product: physicalGiftCard },
+        { category: desktopsCategory, product: configurableComputer },
+      ];
+
+      for (const { category, product } of listProducts) {
+        test(`guest: opens the product page instead of adding ${product.name} from the list`, async ({ page }) => {
+          const header = new Header(page);
+          await page.goto(category);
+          // Attribute fallback: list boxes have no role or label, so scope by the box class and the product heading.
+          const box = page
+            .locator('.product-item')
+            .filter({ has: page.getByRole('heading', { name: product.name }) });
+
+          await box.getByRole('button', { name: 'Add to cart' }).click();
+
+          await expect(page).toHaveURL(`/${product.slug}`);
+          await expect(header.cartLink).toHaveText(/\(0\)/);
+        });
+      }
+
       test('guest: starts a new browser context with an empty cart', async ({ page, browser, baseURL }) => {
         await addToCart(page, smartphone.id, 1);
         await page.goto('/cart');
