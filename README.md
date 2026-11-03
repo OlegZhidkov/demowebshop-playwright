@@ -72,13 +72,68 @@ protection.
 ## Project layout
 
 ```
-tests/                      Playwright specs
-scripts/hooks/              Claude Code hook scripts (secrets gate, writer guard)
+tests/
+  *.spec.ts                 Specs: cart, login, password-recovery, register, search
+  pages/                    Page objects (cart, gift card form, header, login)
+  support/                  Helpers: cart API calls, env, custom matchers, product data
+scripts/
+  ci-summary.js             Builds the run summary shown on the GitHub Actions page
+  hooks/                    Claude Code hooks (secrets gate, writer guard)
 playwright.config.ts        Test configuration and base URL
 tsconfig.json               TypeScript strict config
-.github/workflows/          CI: typecheck, then tests
+.github/workflows/          CI: typecheck, tests, summary, encrypted report, Slack
 .claude/                    Claude Code settings and project agents
 CLAUDE.md                   Project conventions
+```
+
+## How it fits together
+
+```mermaid
+flowchart LR
+    subgraph Local["Local run"]
+        ENV[".env<br/>TEST_USER_*"] --> CFG
+        CMD["npm test"] --> CFG["playwright.config.ts<br/>baseURL, retries, reporters"]
+    end
+    CFG --> SPECS["tests/*.spec.ts"]
+    SPECS --> PO["pages/<br/>page objects"]
+    SPECS --> SUP["support/<br/>cart API, env, matchers, products"]
+    PO --> APP["demowebshop.tricentis.com"]
+    SUP --> APP
+    APP --> RES["Results<br/>HTML report, failure screenshots,<br/>traces on retry"]
+```
+
+## Development flow
+
+```mermaid
+flowchart TD
+    A["Plan<br/>test-planner agent inspects the live app"] --> B{"Approved?"}
+    B -- no --> A
+    B -- yes --> C["Implement<br/>short-lived branch<br/>playwright-test-writer agent"]
+    C --> D["Verify<br/>npm test + npm run typecheck"]
+    D --> E["Review<br/>code-reviewer agent"]
+    E -- findings --> C
+    E -- clean --> F["Commit"]
+    F --> G["Push<br/>secrets-gate hook scans commits"]
+    G --> H["Open PR into main"]
+    H --> I["GitHub Actions"]
+    I -- fails --> C
+    I -- passes --> J["Squash and merge<br/>update main, delete branch"]
+```
+
+## CI flow
+
+```mermaid
+flowchart TD
+    T1["Pull request into main"] --> J
+    T2["Nightly 00:00 UTC"] --> J
+    T3["Manual run"] --> J
+    J["Install deps"] --> TC["npm run typecheck"]
+    TC --> PW["Install Chromium"] --> RUN["npm test<br/>1 worker, 2 retries"]
+    RUN --> SUM["ci-summary.js<br/>run page summary<br/>(even on failure)"]
+    SUM --> ENC["Encrypt report with gpg<br/>(even on failure)"]
+    ENC --> UP["Upload encrypted-report<br/>30 days"]
+    UP --> SL{"Nightly?"}
+    SL -- yes --> SLACK["Post result to Slack<br/>(pass or fail, never fails the run)"]
 ```
 
 ## Conventions
