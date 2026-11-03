@@ -7,13 +7,20 @@ import { defineConfig, devices } from '@playwright/test';
 const envFile = path.resolve(__dirname, '.env');
 if (existsSync(envFile)) process.loadEnvFile(envFile);
 
+const excludedTags = [
+  process.env.RUN_DATA_TESTS === '1' ? undefined : '@creates-data',
+  process.env.RUN_KNOWN_BUGS === '1' ? undefined : '@known-bug',
+].filter((tag) => tag !== undefined);
+
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
   testDir: './tests',
-  /* Tests tagged @creates-data register real accounts on the shop. They run only with RUN_DATA_TESTS=1 (npm run test:data). */
-  grepInvert: process.env.RUN_DATA_TESTS === '1' ? undefined : /@creates-data/,
+  /* Tests tagged @creates-data register real accounts on the shop. They run only with RUN_DATA_TESTS=1 (npm run test:data).
+     Tests tagged @known-bug assert correct behavior the shop does not have yet, so they fail by design.
+     They run only with RUN_KNOWN_BUGS=1 (npm run test:known-bugs). */
+  grepInvert: excludedTags.length > 0 ? new RegExp(excludedTags.join('|')) : undefined,
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */

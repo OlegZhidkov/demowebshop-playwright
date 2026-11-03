@@ -6,6 +6,7 @@
   "scripts": {
     "test": "playwright test",
     "test:data": "RUN_DATA_TESTS=1 playwright test --grep @creates-data",
+    "test:known-bugs": "RUN_KNOWN_BUGS=1 playwright test --grep @known-bug",
     "typecheck": "tsc --noEmit"
   },
   "keywords": [],
