@@ -42,12 +42,9 @@ guidance.
 
 ## 6. Ship
 
-1. Run the `secrets-checker` agent. Fix anything it finds before pushing.
-2. Push the branch and open a PR. Keep the description short: one summary line, then 3 to 5
-   bullets. No "Checks:" line, no attribution line.
-3. Confirm the same commit passes in GitHub Actions with `gh pr checks <n>`. If it fails,
-   stop, read the failure and report it. Investigate any test the report marks as flaky.
-4. Squash-merging is the user's step. After they merge, update `main` and delete the old
-   branch (local, and remote only if it is still there).
+Invoke the `open-pr` skill. It runs the `secrets-checker` agent, pushes, opens the PR with
+a short description, and watches CI on the pushed commit. If CI fails or a test is flaky, it
+hands over to `triage-ci-failure`. Squash-merging is the user's step; `open-pr` also covers
+the cleanup afterwards.
 
 Ask before anything destructive, such as a force push or deleting a remote branch.
