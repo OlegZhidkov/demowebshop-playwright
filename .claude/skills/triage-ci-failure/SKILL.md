@@ -35,10 +35,10 @@ passwords. That is why CI encrypts the report.
 Check in this order and stop at the first match:
 
 1. **Known bug.** Tests tagged `@known-bug` assert the correct behavior that the demo site
-   does not meet yet, so they are expected to fail (no tests are tagged yet, so this check
-   finds nothing until the first one is added). Run
-   `grep -rn @known-bug tests` and see whether the failing test or behavior matches one. A
-   match is expected: say so, and do not "fix" it.
+   does not meet yet, so they are expected to fail. The default run and CI exclude them, so a
+   CI failure is not one of them unless the workflow was changed to run them. A local
+   `npm run test:known-bugs` failure can be. Run `grep -rn @known-bug tests` and see whether
+   the failing test or behavior matches one. A match is expected: say so, and do not "fix" it.
 2. **Regression from this change.** Did the diff touch the failing test or a file it
    imports? Does the same test pass on the latest `main` run
    (`gh run list --branch main`)?

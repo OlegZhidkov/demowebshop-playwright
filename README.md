@@ -19,8 +19,9 @@ so browsers are installed explicitly with the command above.
 
 | Command | What it does |
 |---|---|
-| `npm test` | Run the Playwright tests (Chromium), except those tagged `@creates-data` |
+| `npm test` | Run the Playwright tests (Chromium), except those tagged `@creates-data` or `@known-bug` |
 | `npm run test:data` | Run only the `@creates-data` tests. They register real accounts on the shop, so run them on purpose, not in CI |
+| `npm run test:known-bugs` | Run only the `@known-bug` tests. They assert correct behavior the shop does not have yet, so they fail by design while the bug exists. A pass means the bug was fixed |
 | `npx playwright test tests/search.spec.ts` | Run a single spec |
 | `npx playwright test --ui` | Run in UI mode |
 | `npx playwright show-report` | Open the last HTML report |
