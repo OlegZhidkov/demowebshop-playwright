@@ -1,11 +1,4 @@
 import { test } from '@playwright/test';
-import { CartPage } from './pages/cart-page';
-import { GiftCardForm } from './pages/gift-card-form';
-import { Header } from './pages/header';
-import { LoginPage } from './pages/login-page';
-import { addToCart, emptyCart } from './support/cart';
-import { requireEnv } from './support/env';
-import { expect } from './support/matchers';
 import {
   cellPhonesCategory,
   configurableComputer,
@@ -15,7 +8,14 @@ import {
   physicalGiftCard,
   smartphone,
   virtualGiftCard,
-} from './support/products';
+} from './data/products';
+import { CartPage } from './pages/cart-page';
+import { GiftCardForm } from './pages/gift-card-form';
+import { Header } from './pages/header';
+import { LoginPage } from './pages/login-page';
+import { addToCart, emptyCart } from './utils/cart';
+import { requireEnv } from './utils/env';
+import { expect } from './utils/matchers';
 
 // Read inside the tests, so a missing variable fails these tests only, not the loading of the whole suite.
 const credentials = () => ({ email: requireEnv('TEST_USER_EMAIL'), password: requireEnv('TEST_USER_PASSWORD') });
