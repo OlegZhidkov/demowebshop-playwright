@@ -1,4 +1,3 @@
-import { test } from '@playwright/test';
 import {
   cellPhonesCategory,
   configurableComputer,
@@ -9,13 +8,13 @@ import {
   smartphone,
   virtualGiftCard,
 } from './data/products';
+import { expect, test } from './fixtures';
 import { CartPage } from './pages/cart-page';
 import { GiftCardForm } from './pages/gift-card-form';
 import { Header } from './pages/header';
 import { LoginPage } from './pages/login-page';
 import { addToCart, emptyCart } from './utils/cart';
 import { requireEnv } from './utils/env';
-import { expect } from './utils/matchers';
 
 // Read inside the tests, so a missing variable fails these tests only, not the loading of the whole suite.
 const credentials = () => ({ email: requireEnv('TEST_USER_EMAIL'), password: requireEnv('TEST_USER_PASSWORD') });
@@ -56,13 +55,8 @@ for (const userType of ['guest', 'logged-in'] as const) {
       // without making later tests depend on earlier ones. No other spec may touch this account's cart.
       test.describe.configure({ mode: 'default' });
 
-      test.beforeEach(async ({ page }) => {
-        const { email, password } = credentials();
-        const loginPage = new LoginPage(page);
-        await loginPage.open();
-        await loginPage.logIn(email, password);
-        await expect(new Header(page).accountLink(email)).toBeVisible();
-        await emptyCart(page);
+      test.beforeEach(async ({ authenticatedPage }) => {
+        await emptyCart(authenticatedPage);
       });
 
       test.afterEach(async ({ page }) => {
@@ -282,6 +276,8 @@ for (const userType of ['guest', 'logged-in'] as const) {
         const { email, password } = credentials();
         await addToCart(page, smartphone.id, 1);
         await addToCart(page, laptop.id, 2);
+        // The fixture leaves the page blank; the header's Log out link needs a loaded page.
+        await page.goto('/');
         await new Header(page).logout();
         await expect(new Header(page).loginLink).toBeVisible();
         const newContext = await browser.newContext({ baseURL });

@@ -53,6 +53,12 @@ created once by hand. Its credentials are never committed.
 
 Tests that register a new account use their own unique fake email instead.
 
+Tests that only need to start logged in use the `authenticatedPage` fixture
+(`tests/fixtures.ts`). It logs in with a plain `fetch` and copies the cookie into the browser
+context. Do not log in by typing the password or with Playwright's `request`: traces record
+both. Only `login.spec.ts` and one cart test log in through the form, because that is what
+they test.
+
 ## Guards for Claude Code
 
 Two hooks run inside Claude Code (see `scripts/hooks/`):
@@ -75,6 +81,7 @@ protection.
 ```
 tests/
   *.spec.ts                 Specs: cart, login, password-recovery, register, search
+  fixtures.ts               Fixtures: authenticatedPage (logged-in test customer)
   pages/                    Page objects (cart, gift card form, header, login)
   utils/                    Helpers: cart API calls, env, custom matchers
   data/                     Test data: products and categories

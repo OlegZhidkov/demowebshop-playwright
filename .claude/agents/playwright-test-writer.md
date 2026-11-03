@@ -35,7 +35,8 @@ Rules:
   tests, built-in `expect`, no sleeps, and the base URL only in `playwright.config.ts`.
 - No real payment data, no placing orders, no secrets.
 - The dedicated test user comes from the `TEST_USER_EMAIL` and `TEST_USER_PASSWORD`
-  environment variables. Never hardcode its credentials.
+  environment variables. Never hardcode its credentials. To start a test logged in, use the
+  `authenticatedPage` fixture from `tests/fixtures.ts` instead of typing the password.
 - Never write a password, or any value used as one, as a literal in a spec, even a dummy one.
   Generate every credential at runtime, for example a unique email
   `` `qa+${crypto.randomUUID()}@example.com` `` and a password from `crypto.randomUUID()`.
