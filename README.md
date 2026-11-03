@@ -75,7 +75,8 @@ protection.
 tests/
   *.spec.ts                 Specs: cart, login, password-recovery, register, search
   pages/                    Page objects (cart, gift card form, header, login)
-  support/                  Helpers: cart API calls, env, custom matchers, product data
+  utils/                    Helpers: cart API calls, env, custom matchers
+  data/                     Test data: products and categories
 scripts/
   ci-summary.js             Builds the run summary shown on the GitHub Actions page
   hooks/                    Claude Code hooks (secrets gate, writer guard)
@@ -96,9 +97,10 @@ flowchart LR
     end
     CFG --> SPECS["tests/*.spec.ts"]
     SPECS --> PO["pages/<br/>page objects"]
-    SPECS --> SUP["support/<br/>cart API, env, matchers, products"]
+    SPECS --> UTL["utils/<br/>cart API, env, matchers"]
+    SPECS --> DATA["data/<br/>products, categories"]
     PO --> APP["demowebshop.tricentis.com"]
-    SUP --> APP
+    UTL --> APP
     APP --> RES["Results<br/>HTML report, failure screenshots,<br/>traces on retry"]
 ```
 

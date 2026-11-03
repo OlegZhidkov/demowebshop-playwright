@@ -2,8 +2,8 @@ import { randomUUID } from 'node:crypto';
 import { test } from '@playwright/test';
 import { Header } from './pages/header';
 import { LoginPage } from './pages/login-page';
-import { requireEnv } from './support/env';
-import { expect } from './support/matchers';
+import { requireEnv } from './utils/env';
+import { expect } from './utils/matchers';
 
 test.describe('Password recovery', () => {
   const sentMessage = 'Email with instructions has been sent to you.';

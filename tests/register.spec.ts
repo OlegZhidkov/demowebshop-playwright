@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import { test, expect, type Page } from '@playwright/test';
-import { requireEnv } from './support/env';
+import { requireEnv } from './utils/env';
 
 test.describe('Registration', () => {
   // Fresh values on every call, so tests never share an account or credentials.

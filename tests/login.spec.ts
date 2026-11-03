@@ -2,8 +2,8 @@ import { randomUUID } from 'node:crypto';
 import { test, type BrowserContext } from '@playwright/test';
 import { Header } from './pages/header';
 import { LoginPage } from './pages/login-page';
-import { requireEnv } from './support/env';
-import { expect } from './support/matchers';
+import { requireEnv } from './utils/env';
+import { expect } from './utils/matchers';
 
 async function authCookie(context: BrowserContext) {
   const cookie = (await context.cookies()).find((c) => c.name === 'NOPCOMMERCE.AUTH');
