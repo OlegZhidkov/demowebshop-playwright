@@ -83,7 +83,7 @@ tests/
   *.spec.ts                 Specs: cart, login, password-recovery, register, search
   fixtures.ts               Fixtures: authenticatedPage (logged-in test customer)
   pages/                    Page objects (cart, gift card form, header, login)
-  utils/                    Helpers: cart API calls, env, custom matchers
+  utils/                    Helpers: cart API calls, login without the form, env, custom matchers
   data/                     Test data: products and categories
 scripts/
   ci-summary.js             Builds the run summary shown on the GitHub Actions page

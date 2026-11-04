@@ -1,7 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import { test } from '@playwright/test';
 import { Header } from './pages/header';
-import { LoginPage } from './pages/login-page';
+import { logInWithoutForm } from './utils/auth';
 import { requireEnv } from './utils/env';
 import { expect } from './utils/matchers';
 
@@ -38,7 +38,7 @@ test.describe('Password recovery', () => {
   });
 
   // Only checks the confirmation message; no mail is delivered to the test account.
-  test('shows the confirmation message for a registered email', async ({ page }) => {
+  test('shows the confirmation message for a registered email', async ({ page, context, baseURL }) => {
     const email = requireEnv('TEST_USER_EMAIL');
     await page.goto('/passwordrecovery');
 
@@ -47,10 +47,9 @@ test.describe('Password recovery', () => {
 
     await expect(page.getByText(sentMessage)).toBeVisible();
 
-    // The password is unchanged, so the account still works.
-    const loginPage = new LoginPage(page);
-    await loginPage.open();
-    await loginPage.logIn(email, requireEnv('TEST_USER_PASSWORD'));
+    // The password is unchanged, so the account still works. Logging in without the form keeps the password out of the report.
+    await logInWithoutForm(context, baseURL!);
+    await page.goto('/');
     await expect(new Header(page)).toBeLoggedInAs(email);
   });
 });
