@@ -20,6 +20,7 @@ Use TypeScript and Playwright Test.
 - Do not use `force` clicks to bypass genuine UI problems.
 - Avoid `networkidle` waits; wait for a specific application condition.
 - Use fixtures when they provide meaningful setup, reuse, or isolation.
+- To start a test logged in, use the `authenticatedPage` fixture from `tests/fixtures.ts`. Never type the test user's password into a form or send it with Playwright's `request`: traces record it. Use the login form only when the login itself is under test.
 - Introduce Page Object Models only where they improve maintainability.
 - Keep test data and reusable helpers separate from test assertions when appropriate.
 - Do not introduce unnecessary abstractions or dependencies.
