@@ -104,9 +104,11 @@ flowchart LR
         CMD["npm test"] --> CFG["playwright.config.ts<br/>baseURL, retries, reporters"]
     end
     CFG --> SPECS["tests/*.spec.ts"]
+    SPECS --> FIX["fixtures.ts<br/>authenticatedPage"]
     SPECS --> PO["pages/<br/>page objects"]
-    SPECS --> UTL["utils/<br/>cart API, env, matchers"]
+    SPECS --> UTL["utils/<br/>cart API, login, env, matchers"]
     SPECS --> DATA["data/<br/>products, categories"]
+    FIX --> UTL
     PO --> APP["demowebshop.tricentis.com"]
     UTL --> APP
     APP --> RES["Results<br/>HTML report, failure screenshots,<br/>traces on retry"]
