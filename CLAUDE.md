@@ -54,7 +54,8 @@ Before considering a change complete:
 1. Run the relevant Playwright tests.
 2. Run the TypeScript compiler without emitting files.
 3. Review the diff for unnecessary complexity.
-4. Report which checks passed and which failed.
+4. Update README.md (layout, diagrams) and CLAUDE.md if the change makes them stale.
+5. Report which checks passed and which failed.
 
 ## Feature workflow
 

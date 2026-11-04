@@ -37,7 +37,8 @@ Do not add retries, timeouts or `force` clicks to make a check pass.
 
 Read `git diff main...HEAD` and look for unnecessary complexity: abstractions with one
 user, unused helpers or dependencies, unrelated edits, duplicated setup. This is your own
-pass; the `code-reviewer` agent is a separate step in the feature workflow.
+pass; the `code-reviewer` agent is a separate step in the feature workflow. Also check that
+README.md (layout, diagrams) and CLAUDE.md still match the code after this change.
 
 ## 4. Report
 
