@@ -83,7 +83,7 @@ tests/
   *.spec.ts                 Specs: cart, login, password-recovery, register, search
   fixtures.ts               Fixtures: authenticatedPage (logged-in test customer)
   pages/                    Page objects (cart, gift card form, header, login)
-  utils/                    Helpers: cart API calls, env, custom matchers
+  utils/                    Helpers: cart API calls, login without the form, env, custom matchers
   data/                     Test data: products and categories
 scripts/
   ci-summary.js             Builds the run summary shown on the GitHub Actions page
@@ -104,9 +104,11 @@ flowchart LR
         CMD["npm test"] --> CFG["playwright.config.ts<br/>baseURL, retries, reporters"]
     end
     CFG --> SPECS["tests/*.spec.ts"]
+    SPECS --> FIX["fixtures.ts<br/>authenticatedPage"]
     SPECS --> PO["pages/<br/>page objects"]
-    SPECS --> UTL["utils/<br/>cart API, env, matchers"]
+    SPECS --> UTL["utils/<br/>cart API, login, env, matchers"]
     SPECS --> DATA["data/<br/>products, categories"]
+    FIX --> UTL
     PO --> APP["demowebshop.tricentis.com"]
     UTL --> APP
     APP --> RES["Results<br/>HTML report, failure screenshots,<br/>traces on retry"]
