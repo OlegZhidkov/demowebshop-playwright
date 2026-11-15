@@ -137,14 +137,14 @@ flowchart TD
 ```mermaid
 flowchart TD
     T1["Pull request into main"] --> J
-    T2["Nightly 00:00 UTC"] --> J
+    T2["Nightly 00:00 UTC<br/>(paused)"] -.-> J
     T3["Manual run"] --> J
     J["Install deps"] --> TC["npm run typecheck"]
     TC --> PW["Install Chromium"] --> RUN["npm test<br/>1 worker, 2 retries"]
     RUN --> SUM["ci-summary.js<br/>run page summary<br/>(even on failure)"]
     SUM --> ENC["Encrypt report with gpg<br/>(even on failure)"]
     ENC --> UP["Upload encrypted-report<br/>30 days"]
-    UP --> SL{"Nightly?"}
+    UP --> SL{"Nightly?<br/>(paused)"}
     SL -- yes --> SLACK["Post result to Slack<br/>(pass or fail, never fails the run)"]
 ```
 
@@ -159,12 +159,13 @@ payment data or perform real purchases.
 GitHub Actions runs `npm run typecheck` and `npm test`:
 
 - on every pull request into `main`;
-- every night at 00:00 UTC, on `main`;
+- every night at 00:00 UTC, on `main` (paused for now: the `schedule` trigger is commented
+  out in the workflow);
 - on demand for any pushed branch: `gh workflow run playwright.yml --ref <branch>`, or
   Actions > Run workflow in GitHub. Manual runs work once the workflow is on `main`.
 
 A push to `main` does not start a run by itself. The pull request run covers the change and
-the nightly run re-checks `main`.
+the nightly run re-checks `main` (while it is paused, nothing does).
 
 ## Workflow
 
